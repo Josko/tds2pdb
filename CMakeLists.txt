@@ -25,7 +25,7 @@ add_executable (tds2pdb ${PROJECT_SRC_FILES})
 # Find and link boost components.
 find_package (Boost 1.55 COMPONENTS filesystem REQUIRED)
 include_directories (${BOOST_INCLUDE_DIR})
-target_link_libraries (tds2pdb ${BOOST_LIBRARIES})
+target_link_libraries (tds2pdb ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 # C++ flags.
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
@@ -48,5 +48,5 @@ add_executable (${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 find_package (GTest REQUIRED)
 include_directories (${GTEST_INCLUDE_DIRS})
 
-target_link_libraries (${PROJECT_TEST_NAME} "${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES}")
+target_link_libraries (${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES})
 add_test (test1 ${PROJECT_TEST_NAME})
