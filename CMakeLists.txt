@@ -20,20 +20,20 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 # Source of the main project.
 file (GLOB PROJECT_SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
-add_executable (tds2pdb ${PROJECT_SRC_FILES})
+add_executable (${PROJECT_NAME} ${PROJECT_SRC_FILES})
 
 # Find and link boost components.
 find_package (Boost 1.55 COMPONENTS filesystem REQUIRED)
 include_directories (${BOOST_INCLUDE_DIR})
-target_link_libraries (tds2pdb ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+target_link_libraries (${PROJECT_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 # C++ flags.
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 
 # Minium C++11 standard required.
-set_property (TARGET tds2pdb PROPERTY CXX_STANDARD 11)
-set_property (TARGET tds2pdb PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property (TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+set_property (TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
 
 #-------------------
@@ -46,7 +46,10 @@ set (PROJECT_TEST_NAME ${PROJECT_NAME}_test)
 file (GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 add_executable (${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 find_package (GTest REQUIRED)
-include_directories (${GTEST_INCLUDE_DIRS})
-
-target_link_libraries (${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES})
+include_directories (${GTEST_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src ${BOOST_INCLUDE_DIR})
+target_link_libraries (${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 add_test (test1 ${PROJECT_TEST_NAME})
+
+# Minium C++11 standard required.
+set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD 11)
+set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
