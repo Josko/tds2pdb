@@ -35,6 +35,9 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 set_property (TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 set_property (TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
+# Strip release binaries.
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
+
 
 #-------------------
 # Test
