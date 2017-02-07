@@ -4,7 +4,7 @@
 
 TEST(FileHandling, AbsolutePaths)
 {
-  boost::filesystem::path tds_file, binary_file, pdb_file;
+  fs::path tds_file, binary_file, pdb_file;
   std::tie(tds_file, binary_file, pdb_file) = get_files("/data/test.tds");
 
   EXPECT_EQ(tds_file.generic_string(), "/data/test.tds");
@@ -14,7 +14,7 @@ TEST(FileHandling, AbsolutePaths)
 
 TEST(FileHandling, RelativePaths)
 {
-  boost::filesystem::path tds_file, binary_file, pdb_file;
+  fs::path tds_file, binary_file, pdb_file;
   std::tie(tds_file, binary_file, pdb_file) = get_files("data/test.tds");
 
   EXPECT_EQ(tds_file.generic_string(), "data/test.tds");
