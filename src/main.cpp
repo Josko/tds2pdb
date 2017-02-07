@@ -2,9 +2,8 @@
 
 #include <cstdint>
 #include <iostream>
-#include <string>
 
-#include <boost/filesystem.hpp>
+#include "file_handling.hpp"
 
 /// Main entry point.
 int32_t main(const int32_t argc, const char** argv)
@@ -15,9 +14,8 @@ int32_t main(const int32_t argc, const char** argv)
     return EXIT_FAILURE;
   }
 
-  const boost::filesystem::path tds_file(argv[1]);
-  const boost::filesystem::path pdb_file = tds_file.parent_path() / tds_file.stem().remove_trailing_separator().replace_extension(".pdb");
-  boost::filesystem::path binary_file = tds_file.parent_path() / tds_file.stem().remove_trailing_separator().replace_extension(".exe");
+  boost::filesystem::path tds_file, binary_file, pdb_file;
+  std::tie(tds_file, binary_file, binary_file) = get_files(argv[1]);
 
   // If the .exe file does not exist, try a .dll file instead.
   if (boost::filesystem::exists(binary_file) == false)
