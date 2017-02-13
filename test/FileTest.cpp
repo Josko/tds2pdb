@@ -54,7 +54,7 @@ TEST(StreamReaders, ReadInt16)
 {
   std::istringstream input("1234");
 
-  EXPECT_EQ(readInteger<int16_t>(input), 121);
+  EXPECT_EQ(readInteger<int16_t>(input), 12);
   EXPECT_EQ(readInteger<int16_t>(input), 34);
 }
 
