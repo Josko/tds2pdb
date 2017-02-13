@@ -43,7 +43,7 @@ inline T readInteger(std::istream& in_stream)
   if (!in_stream)
     throw std::runtime_error("Reading signed integer value failed!");
 
-  std::array<char, sizeof(T) + 1> buffer;
+  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer;
   in_stream.read(buffer.data(), sizeof(T));
   return static_cast<T>(atol(buffer.data()));
 }
@@ -55,7 +55,7 @@ inline T readUInteger(std::istream& in_stream)
   if (!in_stream)
     throw std::runtime_error("Reading unsigned integer value failed!");
 
-  std::array<char, sizeof(T) + 1> buffer;
+  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer;
   in_stream.read(buffer, sizeof(T));
   return static_cast<T>(strtoul(buffer, nullptr, 10));
 }
@@ -67,7 +67,7 @@ inline T readDouble(std::istream& in_stream)
   if (!in_stream)
     throw std::runtime_error("Reading floating point value failed!");
 
-  std::array<char, sizeof(T) + 1> buffer;
+  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer;
   in_stream.read(buffer, sizeof(T));
   return atof(buffer);
 }
