@@ -56,3 +56,18 @@ add_test (test1 ${PROJECT_TEST_NAME})
 # Minium C++11 standard required.
 set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD 11)
 set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+
+#------------------
+# Doxygen
+#------------------
+find_package (Doxygen)
+
+if (DOXYGEN_FOUND)
+  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxygen.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/Doxygen @ONLY)
+  add_custom_target (doc
+                     ${DOXYGEN_EXECUTABLE}
+                     ${CMAKE_CURRENT_BINARY_DIR}/Doxygen
+                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
+                     COMMENT "Generating project documentation with Doxygen" VERBATIM)
+endif (DOXYGEN_FOUND)

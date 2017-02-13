@@ -6,3 +6,4 @@ C++11 tool that converts your .tds files to .pdb for a better debugging experien
 * Boost (Filesystem, System, ProgramOptions)
 * CMake
 * GTest
+* Doxygen
