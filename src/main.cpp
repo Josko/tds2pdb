@@ -6,6 +6,7 @@
 #include <boost/program_options.hpp>
 
 #include "file_handling.hpp"
+#include "tds_parser.hpp"
 
 namespace po = boost::program_options;
 
@@ -55,7 +56,7 @@ int32_t main(const int32_t argc, const char** argv)
     }
   }
 
-  // auto tds_format = parse_tds(tds_file);
+  const auto tds_format = parse_tds(tds_file);
 
   return EXIT_SUCCESS;
 }
