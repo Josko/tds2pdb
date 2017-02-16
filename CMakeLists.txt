@@ -24,7 +24,7 @@ add_executable (${PROJECT_NAME} ${PROJECT_SRC_FILES})
 
 # Find and link boost components.
 find_package (Boost 1.55 COMPONENTS filesystem program_options REQUIRED)
-include_directories (${BOOST_INCLUDE_DIR})
+include_directories (${Boost_INCLUDE_DIR})
 target_link_libraries (${PROJECT_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 # C++ flags.
@@ -49,10 +49,25 @@ set (PROJECT_TEST_NAME ${PROJECT_NAME}_test)
 file (GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 add_executable (${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 find_package (GTest REQUIRED)
-include_directories (${GTEST_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src ${BOOST_INCLUDE_DIR})
+include_directories (${GTEST_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src ${Boost_INCLUDE_DIR})
 target_link_libraries (${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 add_test (test1 ${PROJECT_TEST_NAME})
 
 # Minium C++11 standard required.
 set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD 11)
 set_property (TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+
+#------------------
+# Doxygen
+#------------------
+find_package (Doxygen)
+
+if (DOXYGEN_FOUND)
+  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxygen.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/Doxygen @ONLY)
+  add_custom_target (doc
+                     ${DOXYGEN_EXECUTABLE}
+                     ${CMAKE_CURRENT_BINARY_DIR}/Doxygen
+                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
+                     COMMENT "Generating project documentation with Doxygen" VERBATIM)
+endif (DOXYGEN_FOUND)
