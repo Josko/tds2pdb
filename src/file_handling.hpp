@@ -43,9 +43,9 @@ inline T readInteger(std::istream& in_stream)
   if (!in_stream)
     throw std::runtime_error("Reading signed integer value failed!");
 
-  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer{};
-  in_stream.read(buffer.data(), sizeof(T));
-  return static_cast<T>(atol(buffer.data()));
+  T buf;
+  in_stream.read(reinterpret_cast<char*>(&buf), sizeof(T));
+  return buf;
 }
 
 /// Unsigned integer implementation.

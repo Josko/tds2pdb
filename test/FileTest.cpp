@@ -1,4 +1,6 @@
 #include "gtest/gtest.h"
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
 
 #include "file_handling.hpp"
 
@@ -41,9 +43,12 @@ TEST_F(BinaryFileTest, ExistingFileMustNotThrow)
 }
 
 TEST(StreamReaders, ReadInt8)
-{
-  std::istringstream input("1234");
-
+{   
+  char acArray[6] = "\x00\x01\x02\x03\x04";
+  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
+  
+  EXPECT_EQ(readInteger<int8_t>(input), 0);
   EXPECT_EQ(readInteger<int8_t>(input), 1);
   EXPECT_EQ(readInteger<int8_t>(input), 2);
   EXPECT_EQ(readInteger<int8_t>(input), 3);
@@ -52,17 +57,26 @@ TEST(StreamReaders, ReadInt8)
 
 TEST(StreamReaders, ReadInt16)
 {
-  std::istringstream input("1234");
+  char acArray[9] = "\x01\x00\x02\x00\x03\x00\x04\x00";
+  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readInteger<int16_t>(input), 12);
-  EXPECT_EQ(readInteger<int16_t>(input), 34);
+  EXPECT_EQ(readInteger<int16_t>(input), 1);
+  EXPECT_EQ(readInteger<int16_t>(input), 2);
+  EXPECT_EQ(readInteger<int16_t>(input), 3);
+  EXPECT_EQ(readInteger<int16_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadInt32)
 {
-  std::istringstream input("1234");
+  char acArray[17] = "\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00";
+  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readInteger<int32_t>(input), 1234);
+  EXPECT_EQ(readInteger<int32_t>(input), 1);
+  EXPECT_EQ(readInteger<int32_t>(input), 2);
+  EXPECT_EQ(readInteger<int32_t>(input), 3);
+  EXPECT_EQ(readInteger<int32_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadString)
