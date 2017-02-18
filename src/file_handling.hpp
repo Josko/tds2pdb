@@ -36,40 +36,20 @@ public:
   }
 };
 
-/// Signed integer implementation.
-template<typename T, typename = std::enable_if<std::is_integral<T>::value && std::is_signed<T>::value>>
-inline T readInteger(std::istream& in_stream)
+/// Numeric implementation.
+template<typename T, typename = std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>>
+inline T readNumeric(std::istream& in_stream)
 {
   if (!in_stream)
-    throw std::runtime_error("Reading signed integer value failed!");
+    throw std::runtime_error("Reading numeric value failed - input stream is not ok!");
 
   T buf;
   in_stream.read(reinterpret_cast<char*>(&buf), sizeof(T));
+
+  if (in_stream.eof() && in_stream.fail())
+    throw std::runtime_error("Reading numeric value failed - input stream ran out of data prematurely!");
+
   return buf;
-}
-
-/// Unsigned integer implementation.
-template<typename T, typename = std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value>>
-inline T readUInteger(std::istream& in_stream)
-{
-  if (!in_stream)
-    throw std::runtime_error("Reading unsigned integer value failed!");
-
-  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer{};
-  in_stream.read(buffer, sizeof(T));
-  return static_cast<T>(strtoul(buffer, nullptr, 10));
-}
-
-/// Floating point implementation.
-template<typename T, typename = std::enable_if<std::is_floating_point<T>::value>>
-inline T readDouble(std::istream& in_stream)
-{
-  if (!in_stream)
-    throw std::runtime_error("Reading floating point value failed!");
-
-  std::array<char, std::numeric_limits<T>::digits10 + 1> buffer{};
-  in_stream.read(buffer, sizeof(T));
-  return atof(buffer);
 }
 
 /// String implementation.
@@ -77,10 +57,14 @@ template<const std::size_t N>
 inline std::string readString(std::istream& in_stream)
 {
   if (!in_stream)
-    throw std::runtime_error("Reading string value failed!");
+    throw std::runtime_error("Reading string value failed - input stream is not ok!");
 
   std::array<char, N + 1> buffer{};
   in_stream.read(buffer.data(), N);
+
+  if (in_stream.eof() && in_stream.fail())
+    throw std::runtime_error("Reading string value failed - input stream ran out of data prematurely!");
+
   return std::string(buffer.data());
 }
 

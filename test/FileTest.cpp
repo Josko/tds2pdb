@@ -43,40 +43,71 @@ TEST_F(BinaryFileTest, ExistingFileMustNotThrow)
 }
 
 TEST(StreamReaders, ReadInt8)
-{   
-  char acArray[6] = "\x00\x01\x02\x03\x04";
-  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+{
+  const std::array<char, 6> in {0x00, 0x01, 0x02, 0x03, 0x04, 0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
-  
-  EXPECT_EQ(readInteger<int8_t>(input), 0);
-  EXPECT_EQ(readInteger<int8_t>(input), 1);
-  EXPECT_EQ(readInteger<int8_t>(input), 2);
-  EXPECT_EQ(readInteger<int8_t>(input), 3);
-  EXPECT_EQ(readInteger<int8_t>(input), 4);
+
+  EXPECT_EQ(readNumeric<int8_t>(input), 0);
+  EXPECT_EQ(readNumeric<int8_t>(input), 1);
+  EXPECT_EQ(readNumeric<int8_t>(input), 2);
+  EXPECT_EQ(readNumeric<int8_t>(input), 3);
+  EXPECT_EQ(readNumeric<int8_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadInt16)
 {
-  char acArray[9] = "\x01\x00\x02\x00\x03\x00\x04\x00";
-  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+  const std::array<char, 8> in {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readInteger<int16_t>(input), 1);
-  EXPECT_EQ(readInteger<int16_t>(input), 2);
-  EXPECT_EQ(readInteger<int16_t>(input), 3);
-  EXPECT_EQ(readInteger<int16_t>(input), 4);
+  EXPECT_EQ(readNumeric<int16_t>(input), 1);
+  EXPECT_EQ(readNumeric<int16_t>(input), 2);
+  EXPECT_EQ(readNumeric<int16_t>(input), 3);
+  EXPECT_EQ(readNumeric<int16_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadInt32)
 {
-  char acArray[17] = "\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00";
-  boost::iostreams::array_source source{acArray, sizeof(acArray)};
+  const std::array<char, 17> in {0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readInteger<int32_t>(input), 1);
-  EXPECT_EQ(readInteger<int32_t>(input), 2);
-  EXPECT_EQ(readInteger<int32_t>(input), 3);
-  EXPECT_EQ(readInteger<int32_t>(input), 4);
+  EXPECT_EQ(readNumeric<int32_t>(input), 1);
+  EXPECT_EQ(readNumeric<int32_t>(input), 2);
+  EXPECT_EQ(readNumeric<int32_t>(input), 3);
+  EXPECT_EQ(readNumeric<int32_t>(input), 4);
+}
+
+TEST(StreamReaders, ReadInt64)
+{
+  const std::array<char, 8> in {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
+
+  EXPECT_EQ(readNumeric<uint64_t>(input), 1);
+}
+
+TEST(StreamReaders, ReadNumericPastEnding)
+{
+  const std::array<char, 1> in {0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
+
+  ASSERT_THROW({
+    readNumeric<int64_t>(input);
+  }, std::runtime_error);
+}
+
+TEST(StreamReaders, ReadStringPastEnding)
+{
+  const std::array<char, 1> in {0x00};
+  const boost::iostreams::array_source source {in.data(), in.size()};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
+
+  ASSERT_THROW({
+    readString<5>(input);
+  }, std::runtime_error);
 }
 
 TEST(StreamReaders, ReadString)
@@ -85,5 +116,7 @@ TEST(StreamReaders, ReadString)
 
   EXPECT_EQ(readString<4>(input), "abcd");
   EXPECT_EQ(readString<6>(input), " space");
+  EXPECT_EQ(readString<1>(input), " ");
+  EXPECT_EQ(readString<9>(input), "UpPeRcAsE");
 }
 
