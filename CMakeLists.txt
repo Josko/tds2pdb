@@ -23,12 +23,12 @@ file (GLOB PROJECT_SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 add_executable (${PROJECT_NAME} ${PROJECT_SRC_FILES})
 
 # Find and link boost components.
-find_package (Boost 1.55 COMPONENTS filesystem program_options REQUIRED)
+find_package (Boost 1.55 COMPONENTS filesystem program_options iostreams REQUIRED)
 include_directories (${Boost_INCLUDE_DIR})
 target_link_libraries (${PROJECT_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 # C++ flags.
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -O3")
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 
 # Minium C++11 standard required.
