@@ -7,6 +7,8 @@
 
 namespace fs = boost::filesystem;
 
+/// \file
+
 /// @brief Wrapper class that helps with file RAII and
 /// helper methods for reading certain types.
 class BinaryFile final
@@ -17,7 +19,9 @@ private:
 public:
   /// @Brief Constructs and acquired a stream to read the file.
   ///
-  /// @param file_name File path of the file to be opened..
+  /// @param file_name File path of the file to be opened.
+  ///
+  /// @throw std::runtime_error in the event that the file could not be opened.
   explicit BinaryFile(const char* file_name)
   {
     in_stream.open(file_name, std::ifstream::binary);
@@ -44,6 +48,9 @@ public:
 /// @param in_stream Input stream to read from.
 ///
 /// @return Extracted numeric value.
+///
+/// @throw std::runtime_error when the input stream is not in a valid state or when then
+/// the input stream has ran out of bytes.
 template<typename T, typename = std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>>
 inline T readNumeric(std::istream& in_stream)
 {
@@ -65,6 +72,9 @@ inline T readNumeric(std::istream& in_stream)
 /// @param in_stream Input stream to read from.
 ///
 /// @return Extracted string with the specified length.
+///
+/// @throw std::runtime_error when the input stream is not in a valid state or when then
+/// the input stream has ran out of bytes.
 template<const std::size_t N>
 inline std::string readString(std::istream& in_stream)
 {
