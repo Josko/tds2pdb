@@ -52,7 +52,7 @@ public:
 /// @throw std::runtime_error when the input stream is not in a valid state or when then
 /// the input stream has ran out of bytes.
 template<typename T, typename = std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-inline T readNumeric(std::istream& in_stream)
+inline T read_numeric(std::istream& in_stream)
 {
   if (!in_stream)
     throw std::runtime_error("Reading numeric value failed - input stream is not ok!");
@@ -76,7 +76,7 @@ inline T readNumeric(std::istream& in_stream)
 /// @throw std::runtime_error when the input stream is not in a valid state or when then
 /// the input stream has ran out of bytes.
 template<const std::size_t N>
-inline std::string readString(std::istream& in_stream)
+inline std::string read_string(std::istream& in_stream)
 {
   if (!in_stream)
     throw std::runtime_error("Reading string value failed - input stream is not ok!");

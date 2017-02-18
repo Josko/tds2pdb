@@ -11,7 +11,7 @@ TdsFormat parse_tds(const fs::path tds_file)
   {
     BinaryFile tds(fs::canonical(tds_file).generic_string().c_str());
 
-    const auto signature = readString<4>(tds());
+    const auto signature = read_string<4>(tds());
     if (signature != "FB0A")
       throw std::runtime_error("Wrong signature found! [" + signature + "]");
   }

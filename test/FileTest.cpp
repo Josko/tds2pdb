@@ -48,11 +48,11 @@ TEST(StreamReaders, ReadInt8)
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readNumeric<int8_t>(input), 0);
-  EXPECT_EQ(readNumeric<int8_t>(input), 1);
-  EXPECT_EQ(readNumeric<int8_t>(input), 2);
-  EXPECT_EQ(readNumeric<int8_t>(input), 3);
-  EXPECT_EQ(readNumeric<int8_t>(input), 4);
+  EXPECT_EQ(read_numeric<int8_t>(input), 0);
+  EXPECT_EQ(read_numeric<int8_t>(input), 1);
+  EXPECT_EQ(read_numeric<int8_t>(input), 2);
+  EXPECT_EQ(read_numeric<int8_t>(input), 3);
+  EXPECT_EQ(read_numeric<int8_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadNumericPreservesSignedness)
@@ -61,8 +61,8 @@ TEST(StreamReaders, ReadNumericPreservesSignedness)
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readNumeric<int8_t>(input), -1);
-  EXPECT_EQ(readNumeric<uint8_t>(input), 0xFF);
+  EXPECT_EQ(read_numeric<int8_t>(input), -1);
+  EXPECT_EQ(read_numeric<uint8_t>(input), 0xFF);
 }
 
 TEST(StreamReaders, ReadInt16)
@@ -71,10 +71,10 @@ TEST(StreamReaders, ReadInt16)
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readNumeric<int16_t>(input), 1);
-  EXPECT_EQ(readNumeric<int16_t>(input), 2);
-  EXPECT_EQ(readNumeric<int16_t>(input), 3);
-  EXPECT_EQ(readNumeric<int16_t>(input), 4);
+  EXPECT_EQ(read_numeric<int16_t>(input), 1);
+  EXPECT_EQ(read_numeric<int16_t>(input), 2);
+  EXPECT_EQ(read_numeric<int16_t>(input), 3);
+  EXPECT_EQ(read_numeric<int16_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadInt32)
@@ -83,10 +83,10 @@ TEST(StreamReaders, ReadInt32)
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readNumeric<int32_t>(input), 1);
-  EXPECT_EQ(readNumeric<int32_t>(input), 2);
-  EXPECT_EQ(readNumeric<int32_t>(input), 3);
-  EXPECT_EQ(readNumeric<int32_t>(input), 4);
+  EXPECT_EQ(read_numeric<int32_t>(input), 1);
+  EXPECT_EQ(read_numeric<int32_t>(input), 2);
+  EXPECT_EQ(read_numeric<int32_t>(input), 3);
+  EXPECT_EQ(read_numeric<int32_t>(input), 4);
 }
 
 TEST(StreamReaders, ReadInt64)
@@ -95,7 +95,7 @@ TEST(StreamReaders, ReadInt64)
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
-  EXPECT_EQ(readNumeric<uint64_t>(input), 1);
+  EXPECT_EQ(read_numeric<uint64_t>(input), 1);
 }
 
 TEST(StreamReaders, ReadNumericPastEnding)
@@ -105,7 +105,7 @@ TEST(StreamReaders, ReadNumericPastEnding)
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
   ASSERT_THROW({
-    readNumeric<int64_t>(input);
+    read_numeric<int64_t>(input);
   }, std::runtime_error);
 }
 
@@ -116,7 +116,7 @@ TEST(StreamReaders, ReadStringPastEnding)
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
   ASSERT_THROW({
-    readString<5>(input);
+    read_string<5>(input);
   }, std::runtime_error);
 }
 
@@ -124,9 +124,9 @@ TEST(StreamReaders, ReadString)
 {
   std::istringstream input("abcd space UpPeRcAsE");
 
-  EXPECT_EQ(readString<4>(input), "abcd");
-  EXPECT_EQ(readString<6>(input), " space");
-  EXPECT_EQ(readString<1>(input), " ");
-  EXPECT_EQ(readString<9>(input), "UpPeRcAsE");
+  EXPECT_EQ(read_string<4>(input), "abcd");
+  EXPECT_EQ(read_string<6>(input), " space");
+  EXPECT_EQ(read_string<1>(input), " ");
+  EXPECT_EQ(read_string<9>(input), "UpPeRcAsE");
 }
 
