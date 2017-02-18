@@ -7,7 +7,7 @@
 
 namespace fs = boost::filesystem;
 
-/// Wrapper class that helps with file RAII and
+/// @brief Wrapper class that helps with file RAII and
 /// helper methods for reading certain types.
 class BinaryFile final
 {
@@ -15,7 +15,9 @@ private:
   std::ifstream in_stream;
 
 public:
-  /// Constructs and acquired a stream to read the file.
+  /// @Brief Constructs and acquired a stream to read the file.
+  ///
+  /// @param file_name File path of the file to be opened..
   explicit BinaryFile(const char* file_name)
   {
     in_stream.open(file_name, std::ifstream::binary);
@@ -36,7 +38,12 @@ public:
   }
 };
 
-/// Numeric implementation.
+/// @brief Reads the appropriate number of bytes from the input stream and returns them as
+/// the numeric type specified.
+///
+/// @param in_stream Input stream to read from.
+///
+/// @return Extracted numeric value.
 template<typename T, typename = std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>>
 inline T readNumeric(std::istream& in_stream)
 {
@@ -52,7 +59,12 @@ inline T readNumeric(std::istream& in_stream)
   return buf;
 }
 
-/// String implementation.
+/// @brief Reads the appropriate number of bytes from the input stream and returns them as
+/// a string.
+///
+/// @param in_stream Input stream to read from.
+///
+/// @return Extracted string with the specified length.
 template<const std::size_t N>
 inline std::string readString(std::istream& in_stream)
 {
@@ -68,10 +80,14 @@ inline std::string readString(std::istream& in_stream)
   return std::string(buffer.data());
 }
 
-/// Helper function for determining the path trio:
-/// Path of the TDS file (file we convert from)
-/// Path of the EXE/DLL file (file we convert for)
-/// Path of the PDB file (file we conver to)
+/// @brif Helper function for determining the path trio.
+///
+/// @param file_path File path that specifies the stem of the taret files (Example: Stem of the file test.exe is just "test")
+///
+/// @return Tuple containing thee paths:
+/// - Path of the TDS file (file we convert from):
+/// - Path of the EXE/DLL file (file we convert for)
+/// - Path of the PDB file (file we conver to)
 inline std::tuple<fs::path, fs::path, fs::path> get_files(const char* file_path)
 {
   auto base_path = fs::path(file_path);
