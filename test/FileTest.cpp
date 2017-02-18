@@ -55,9 +55,19 @@ TEST(StreamReaders, ReadInt8)
   EXPECT_EQ(readNumeric<int8_t>(input), 4);
 }
 
+TEST(StreamReaders, ReadNumericPreservesSignedness)
+{
+  const std::array<char, 2> in {static_cast<char>(0xFF), static_cast<char>(0XFF)};
+  const boost::iostreams::array_source source {in.data(), in.size()};
+  boost::iostreams::stream<boost::iostreams::array_source> input{source};
+
+  EXPECT_EQ(readNumeric<int8_t>(input), -1);
+  EXPECT_EQ(readNumeric<uint8_t>(input), 0xFF);
+}
+
 TEST(StreamReaders, ReadInt16)
 {
-  const std::array<char, 8> in {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00};
+  const std::array<char, 10> in {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00};
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
