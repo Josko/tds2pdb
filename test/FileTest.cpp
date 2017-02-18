@@ -67,7 +67,7 @@ TEST(StreamReaders, ReadNumericPreservesSignedness)
 
 TEST(StreamReaders, ReadInt16)
 {
-  const std::array<char, 10> in {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00};
+  const std::array<char, 8> in {0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00};
   const boost::iostreams::array_source source {in.data(), in.size()};
   boost::iostreams::stream<boost::iostreams::array_source> input{source};
 
