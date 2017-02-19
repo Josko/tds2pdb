@@ -30,12 +30,17 @@ public:
       throw std::runtime_error("Error opening binary file: " + std::string(file_name));
   }
 
+  /// @brief Closes and releases he BinaryFile and
+  /// it's associated resources.
   ~BinaryFile()
   {
     if (in_stream.is_open())
       in_stream.close();
   }
 
+  /// @brief Conversion operator
+  ///
+  /// @return std::istream&
   inline std::istream& operator()()
   {
     return in_stream;
