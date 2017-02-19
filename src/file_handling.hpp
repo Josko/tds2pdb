@@ -49,8 +49,8 @@ public:
 ///
 /// @return Extracted numeric value.
 ///
-/// @throw std::runtime_error when the input stream is not in a valid state or when then
-/// the input stream has ran out of bytes.
+/// @throw std::runtime_error when the input stream is not in a valid state.
+/// @throw std::runtime_error when the input stream has ran out of bytes.
 template<typename T, typename = std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value>>
 inline T read_numeric(std::istream& in_stream)
 {

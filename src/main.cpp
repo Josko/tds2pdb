@@ -10,8 +10,9 @@
 
 namespace po = boost::program_options;
 
+/// \file
 
-/// Main entry point.
+/// @brief Main entry point. Users specifies the files to be processed via the arguments.
 int32_t main(const int32_t argc, const char** argv)
 {
   std::string input_file;
